@@ -1,0 +1,25 @@
+@use "variables" as vars;
+
+nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 200px;
+    padding: 10px;
+    // border-bottom: 1px solid var(--foreground);
+    
+    position: sticky;
+    background: vars.$fourth-color;
+    img {
+        border-radius: 50%;
+    }
+    ul {
+        display: flex;
+        gap: 15px;
+        color: vars.$main-color;
+        a {
+            text-decoration: none;
+        }  
+        
+    }
+}
