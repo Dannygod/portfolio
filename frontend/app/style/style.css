@@ -1,42 +1,1091 @@
-nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 200px;
-  padding: 10px;
-  position: sticky;
-  background: rgb(245, 245, 245);
-}
-nav img {
-  border-radius: 50%;
-}
-nav ul {
-  display: flex;
-  gap: 15px;
-  color: rgb(118, 0, 0);
-}
-nav ul a {
-  text-decoration: none;
-}
+/* =============================================
+   Danny Hsu Portfolio
+   Style: Japanese Editorial / 日式極簡
+   Inspired by: viva-next.com / willstyle.co.jp / tera-energy.com
+   Palette: Warm Off-White + Deep Ink + Subtle Stone
+   Fonts: Cormorant Garamond + DM Sans
+   ============================================= */
 
-* {
+/* ---- Reset ---- */
+*, *::before, *::after {
   margin: 0;
-  border: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
+/* ---- CSS Variables ---- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Palette — warm, neutral, editorial */
+  --ink:        #1a1a18;        /* 深墨 — 近黑 */
+  --ink-light:  #3a3a36;        /* 次級文字 */
+  --stone:      #6b6b65;        /* 輔助灰 */
+  --stone-light:#a8a8a2;        /* 細節灰 */
+  --border:     #d8d5ce;        /* 細線 */
+  --border-fine:#e8e5de;        /* 更細 */
+  --paper:      #f5f0e9;        /* 溫暖米白底 (tera-energy主色) */
+  --paper-warm: #eeead f;       /* 微深一點的米色區域 */
+  --white:      #ffffff;
+
+  /* Accent — 一點點的日式紅，像印鑑 */
+  --accent:     #c0392b;        /* 印章紅 */
+  --accent-soft:#e8d5d2;        /* 極淡粉 */
+
+  /* Typography */
+  --font-heading: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-body:    var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
+
+  /* Spacing — 日式設計最重要：大留白 */
+  --nav-h:     64px;
+  --gutter:    clamp(24px, 5vw, 80px);
+  --section-v: clamp(80px, 14vw, 180px);
+  --max-w:     1160px;
+
+  /* Line heights */
+  --lh-tight:  1.1;
+  --lh-normal: 1.6;
+  --lh-loose:  1.9;
+
+  /* Letter spacing — 日文感的字距 */
+  --ls-wide:   0.12em;
+  --ls-wider:  0.2em;
+  --ls-tight:  -0.02em;
 }
 
-.dark {
-  --background: #171717;
-  --foreground: #ffffff;
+/* ---- Base ---- */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}/*# sourceMappingURL=style.css.map */
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--paper); }
+::-webkit-scrollbar-thumb { background: var(--stone-light); border-radius: 2px; }
+
+/* ---- Typography Base ---- */
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  color: var(--ink);
+  letter-spacing: var(--ls-tight);
+}
+
+p {
+  color: var(--ink-light);
+  line-height: var(--lh-loose);
+  font-weight: 300;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ========================================
+   KEYFRAMES
+   ======================================== */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes lineExpand {
+  from { transform: scaleX(0); transform-origin: left; }
+  to   { transform: scaleX(1); transform-origin: left; }
+}
+
+@keyframes textReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ========================================
+   NAVIGATION — 極簡横線風格
+   ======================================== */
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--gutter);
+  background: rgba(245, 240, 233, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s ease;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.nav-logo img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(20%);
+}
+
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nav-logo-name {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.nav-logo-sub {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: var(--stone);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3vw, 52px);
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--stone);
+  position: relative;
+  transition: color 0.3s;
+  padding-bottom: 3px;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.nav-resume {
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  padding: 7px 16px;
+  transition: all 0.3s;
+  background: transparent;
+}
+
+.nav-resume:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+/* ========================================
+   HERO — 日式大標題風格 (viva-next inspired)
+   ======================================== */
+
+.hero {
+  min-height: 100vh;
+  padding-top: var(--nav-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+/* 背景裝飾線 */
+.hero::before {
+  content: '';
+  position: absolute;
+  right: var(--gutter);
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--border-fine);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--gutter) * 5);
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--border-fine);
+  display: none;
+}
+
+.hero-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--section-v) var(--gutter);
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: flex-end;
+}
+
+.hero-content {
+  animation: fadeUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+}
+
+/* 小標籤 — 日式：英文小大寫 */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.eyebrow-line {
+  width: 32px;
+  height: 1px;
+  background: var(--stone);
+  animation: lineExpand 0.8s ease 0.5s both;
+}
+
+.eyebrow-text {
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.eyebrow-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* 主標題 — 超大 editorial */
+.hero-name {
+  font-family: var(--font-heading);
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: var(--ink);
+  margin-bottom: 40px;
+}
+
+/* 職稱 — 打字機效果 */
+.hero-role-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.hero-role-prefix {
+  font-size: 0.7rem;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--stone-light);
+  font-weight: 400;
+}
+
+.hero-typing {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-light);
+  letter-spacing: 0;
+}
+
+.hero-cursor {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background: var(--ink);
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  animation: cursor-blink 1.1s step-end infinite;
+}
+
+/* 說明文字 */
+.hero-desc {
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--stone);
+  line-height: var(--lh-loose);
+  max-width: 420px;
+  margin-bottom: 56px;
+}
+
+/* Hero CTA */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.btn-ink {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 14px 32px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--ink);
+}
+
+.btn-ink:hover {
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+  transition: border-color 0.3s;
+}
+
+.btn-ghost:hover {
+  border-color: var(--ink);
+}
+
+.btn-arrow {
+  font-size: 0.7rem;
+  transition: transform 0.3s;
+}
+
+.btn-ink:hover .btn-arrow { transform: translateX(4px); }
+.btn-ghost:hover .btn-arrow { transform: translateX(4px); }
+
+/* Hero right: vertical info column */
+.hero-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+  padding-bottom: 8px;
+  animation: fadeIn 1s ease 0.6s both;
+}
+
+.hero-aside-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.hero-aside-label {
+  font-size: 0.58rem;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--stone-light);
+  font-weight: 400;
+}
+
+.hero-aside-value {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+/* Scroll indicator */
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: fadeIn 1s ease 1.2s both;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--border), var(--stone-light));
+  animation: lineExpand 1s ease 1.5s both;
+  transform-origin: top;
+}
+
+.scroll-text {
+  font-size: 0.58rem;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--stone-light);
+  writing-mode: vertical-lr;
+  margin-top: 4px;
+}
+
+/* ========================================
+   SECTION COMMON
+   ======================================== */
+
+.section-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--section-v) var(--gutter);
+}
+
+/* Section heading — Japanese editorial */
+.sec-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: clamp(48px, 8vw, 96px);
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+
+.sec-label-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sec-label-en {
+  font-size: 0.62rem;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--stone-light);
+  font-weight: 400;
+}
+
+.sec-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: var(--ls-tight);
+  line-height: 1;
+}
+
+.sec-title em {
+  font-style: italic;
+  color: var(--stone);
+}
+
+.sec-num {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--stone-light);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+/* ========================================
+   ABOUT SECTION
+   ======================================== */
+
+.about-section {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 8vw, 120px);
+  align-items: start;
+}
+
+.about-portrait {
+  position: relative;
+}
+
+.about-portrait img {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(15%);
+}
+
+.about-portrait-caption {
+  margin-top: 16px;
+  font-size: 0.68rem;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--stone-light);
+  font-weight: 400;
+}
+
+.about-body {
+  padding-top: 16px;
+}
+
+.about-body h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 32px;
+  letter-spacing: var(--ls-tight);
+  color: var(--ink);
+}
+
+.about-body h2 em {
+  font-style: italic;
+  color: var(--stone);
+}
+
+.about-body p {
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--stone);
+  line-height: var(--lh-loose);
+  margin-bottom: 18px;
+}
+
+/* Info table — 日式清單風格 */
+.about-info {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-fine);
+}
+
+.about-info-row {
+  display: flex;
+  gap: 32px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-fine);
+  align-items: baseline;
+}
+
+.info-key {
+  font-size: 0.62rem;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--stone-light);
+  font-weight: 400;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.info-val {
+  font-size: 0.83rem;
+  font-weight: 300;
+  color: var(--ink-light);
+  line-height: 1.5;
+}
+
+.info-val a {
+  color: var(--ink-light);
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+.info-val a:hover { border-color: var(--ink); }
+
+/* ========================================
+   SKILLS SECTION
+   ======================================== */
+
+.skills-section {
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+}
+
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.skill-row {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(20px, 4vw, 60px);
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border-fine);
+  transition: background 0.2s;
+}
+
+.skill-row:first-child {
+  border-top: 1px solid var(--border-fine);
+}
+
+.skill-category {
+  font-size: 0.6rem;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--stone-light);
+  font-weight: 400;
+  min-width: clamp(80px, 10vw, 120px);
+  flex-shrink: 0;
+}
+
+.skill-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  flex: 1;
+}
+
+.skill-tag {
+  font-family: var(--font-heading);
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  font-weight: 400;
+  color: var(--ink-light);
+  letter-spacing: 0;
+  position: relative;
+  cursor: default;
+  transition: color 0.2s;
+}
+
+.skill-tag:hover { color: var(--ink); }
+
+.skill-tag::after {
+  content: '/';
+  margin-left: 16px;
+  color: var(--border);
+  font-weight: 300;
+}
+
+.skill-tag:last-child::after { display: none; }
+
+.skill-num {
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  color: var(--stone-light);
+  font-weight: 400;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   EXPERIENCE SECTION
+   ======================================== */
+
+.experience-section {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.exp-item {
+  display: grid;
+  grid-template-columns: clamp(60px, 8vw, 100px) 1fr;
+  gap: 40px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border-fine);
+  transition: opacity 0.3s;
+}
+
+.exp-item:first-child { border-top: 1px solid var(--border-fine); }
+.exp-item:hover { opacity: 0.75; }
+
+.exp-year {
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--stone-light);
+  padding-top: 4px;
+}
+
+.exp-body {}
+
+.exp-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.exp-org {
+  font-size: 0.72rem;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--stone);
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.exp-desc {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--stone);
+  line-height: var(--lh-loose);
+  max-width: 580px;
+  margin-bottom: 20px;
+}
+
+.exp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.exp-tag {
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--stone);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+}
+
+/* Award item */
+.award-item {
+  display: grid;
+  grid-template-columns: clamp(60px, 8vw, 100px) 1fr;
+  gap: 40px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border-fine);
+}
+
+.award-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border: 1px solid var(--border);
+  font-size: 1.1rem;
+}
+
+.award-body {}
+
+.award-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: 6px;
+}
+
+.award-sub {
+  font-size: 0.8rem;
+  color: var(--stone);
+  font-weight: 300;
+  line-height: var(--lh-loose);
+}
+
+/* ========================================
+   CONTACT SECTION — 全版留白
+   ======================================== */
+
+.contact-section {
+  background: var(--ink);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.contact-section .sec-header {
+  border-top-color: rgba(255,255,255,0.1);
+}
+
+.contact-section .sec-label-en,
+.contact-section .sec-num {
+  color: rgba(255,255,255,0.3);
+}
+
+.contact-section .sec-title {
+  color: var(--paper);
+}
+
+.contact-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(40px, 8vw, 80px) 0;
+  gap: 48px;
+}
+
+.contact-headline {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 8vw, 7rem);
+  font-weight: 300;
+  color: var(--paper);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+}
+
+.contact-headline em {
+  font-style: italic;
+  color: rgba(245,240,233,0.5);
+}
+
+.contact-sub {
+  font-size: 0.83rem;
+  font-weight: 300;
+  color: rgba(245,240,233,0.5);
+  line-height: var(--lh-loose);
+  max-width: 360px;
+}
+
+.contact-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.contact-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--paper);
+  text-decoration: none;
+  transition: opacity 0.3s;
+  opacity: 0.7;
+}
+
+.contact-link:hover { opacity: 1; }
+
+.contact-link-label {
+  font-size: 0.62rem;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.contact-link-val {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 400;
+  border-bottom: 1px solid rgba(245,240,233,0.3);
+  padding-bottom: 2px;
+  transition: border-color 0.3s;
+}
+
+.contact-link:hover .contact-link-val {
+  border-color: rgba(245,240,233,0.8);
+}
+
+.contact-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255,255,255,0.15);
+}
+
+/* Big email CTA */
+.contact-email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--paper);
+  padding: 16px 40px;
+  border: 1px solid var(--paper);
+  transition: all 0.35s;
+  text-decoration: none;
+}
+
+.contact-email-btn:hover {
+  background: transparent;
+  color: var(--paper);
+  border-color: rgba(245,240,233,0.4);
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+
+.footer {
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 28px var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-copy {
+  font-size: 0.65rem;
+  font-weight: 300;
+  color: rgba(245,240,233,0.3);
+  letter-spacing: 0.04em;
+}
+
+.footer-links {
+  display: flex;
+  gap: 28px;
+}
+
+.footer-links a {
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: rgba(245,240,233,0.35);
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: rgba(245,240,233,0.7); }
+
+/* ========================================
+   SCROLL REVEAL
+   ======================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 900px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-aside {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+
+  .hero-aside-item { align-items: flex-start; }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-portrait img {
+    max-width: 240px;
+    aspect-ratio: 1/1;
+  }
+
+  .sec-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+
+  .hero-name {
+    font-size: clamp(3.2rem, 18vw, 5rem);
+  }
+
+  .exp-item,
+  .award-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .contact-links { gap: 20px; }
+
+  .footer { flex-direction: column; text-align: center; }
+}
