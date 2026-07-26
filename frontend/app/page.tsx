@@ -95,7 +95,6 @@ function HeroSection() {
           <div className="eyebrow">
             <span className="eyebrow-line" />
             <span className="eyebrow-text">Portfolio</span>
-            <span className="eyebrow-dot" aria-hidden />
             <span className="eyebrow-text">2026</span>
           </div>
 
@@ -141,7 +140,7 @@ function HeroSection() {
           </div>
           <div className="hero-aside-item">
             <span className="hero-aside-label">Class</span>
-            <span className="hero-aside-value">2027</span>
+            <span className="hero-aside-value">2026</span>
           </div>
         </div>
       </div>
@@ -183,13 +182,13 @@ function AboutSection() {
             </h2>
 
             <p>
-              I&rsquo;m a third-year Computer Science student at National Taiwan
+              I&rsquo;m a Computer Science student at National Taiwan
               Normal University with a deep interest in front-end engineering.
               I care about the details — clean code, intentional design, and
               interfaces that feel natural to use.
             </p>
             <p>
-              Alongside my studies, I work as a Software R&amp;D Assistant,
+              Alongside my studies, I work as a web frontend engineer,
               applying React, TypeScript, and Angular in real products. I enjoy
               the balance between thoughtful architecture and expressive UI.
             </p>
@@ -197,8 +196,8 @@ function AboutSection() {
             <div className="about-info">
               {[
                 ["Education", "NTNU — Computer Science & Information Engineering"],
-                ["Duration", "2023 – 2027"],
-                ["Role", "Software R&D Assistant (Part-time)"],
+                ["Duration", "2022 – 2026"],
+                ["Role", "Web frontend engineer (intern)"],
                 ["Location", "Taipei, Taiwan"],
                 ["Email", <a key="em" href="mailto:danny539425@gmail.com">danny539425@gmail.com</a>],
                 ["LinkedIn", <a key="li" href="https://www.linkedin.com/in/danny-hsu-profile/" target="_blank" rel="noopener noreferrer">danny-hsu-profile</a>],
@@ -286,7 +285,7 @@ function ExperienceSection() {
               <span className="exp-year">2024–</span>
             </div>
             <div className="exp-body">
-              <h3 className="exp-title">Software R&amp;D Assistant</h3>
+              <h3 className="exp-title"> Web Frontend Engineer</h3>
               <p className="exp-org">Part-time Position</p>
               <p className="exp-desc">
                 Developing and maintaining front-end features with React.js,
@@ -305,7 +304,7 @@ function ExperienceSection() {
           {/* Education */}
           <div className="exp-item reveal reveal-d1">
             <div>
-              <span className="exp-year">2023–<br />2027</span>
+              <span className="exp-year">2022–<br />2026</span>
             </div>
             <div className="exp-body">
               <h3 className="exp-title">B.S. Computer Science &amp; Information Engineering</h3>
@@ -327,7 +326,7 @@ function ExperienceSection() {
           {/* Award */}
           <div className="award-item reveal reveal-d2">
             <div>
-              <div className="award-badge">🏆</div>
+              <div className="award-badge"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trophy-icon lucide-trophy"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2"/><path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2"/><path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3"/><path d="M4 22h16"/><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/><path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3"/></svg></div>
             </div>
             <div className="award-body">
               <h3 className="award-title">Top 15 Finalist</h3>
