@@ -1,27 +1,26 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 
-// Heading font: Cormorant Garamond — elegant, editorial serif  
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+// Body font: Inter — clean, modern, highly readable
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  style: ["normal", "italic"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-// Body font: DM Sans — geometric, clean, neutral
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+// Code font: JetBrains Mono — developer aesthetic
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Danny Hsu",
+  title: "Danny Hsu — Portfolio",
   description:
-    "Danny Hsu — Front-end Engineer & CS student at NTNU. Building thoughtful digital experiences with React, TypeScript, and Angular.",
+    "Danny Hsu — Front-end Engineer & CS student at NTNU. Explore my projects, contributions, and work built with React, TypeScript, and Angular.",
 };
 
 export default function RootLayout({
@@ -32,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${dmSans.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <body>
