@@ -9,12 +9,18 @@ const GITHUB_USERNAME = "Dannygod";
 // 🔧 Edit this array to choose which repos to showcase on your portfolio
 const PINNED_REPOS = [
   "portfolio",
-  "cp2-final-vibecoding",
   "emotional-critter-haven",
   "MasterGrammer",
-  "ADBERT-frontend-engineer-interview-hw",
-  "lvdairyapp",
-  "TownPass",
+  "DoorsOfWorld"
+];
+
+// 🔧 Repos you contributed to but don't own — use the full GitHub URL
+const CONTRIBUTED_REPOS = [
+  "https://github.com/CSIE-Camp/Camp_website_2024",
+  "https://github.com/CSIE-Camp/website-frontend",
+  "https://github.com/CSIE-Camp/Slot_Machine",
+  "https://github.com/Dannygod/TownPass",
+  "https://github.com/Dannygod/frontend"
 ];
 
 // Language colors (GitHub-style)
@@ -113,6 +119,49 @@ function useGitHubRepos() {
       setRepos(data);
     } catch {
       setError("Failed to load projects from GitHub.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRepos();
+  }, [fetchRepos]);
+
+  return { repos, loading, error };
+}
+
+// ─── Contributed Repos Hook ───────────────────────────────────────────────
+function useContributedRepos() {
+  const [repos, setRepos] = useState<RepoData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchRepos = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const responses = await Promise.allSettled(
+        CONTRIBUTED_REPOS.map((url) => {
+          // Convert full URL → API path, e.g. "https://github.com/Org/Repo" → "Org/Repo"
+          const path = url.replace("https://github.com/", "");
+          return fetch(`https://api.github.com/repos/${path}`).then((r) => {
+            if (!r.ok) throw new Error(`${path}: ${r.status}`);
+            return r.json() as Promise<RepoData>;
+          });
+        })
+      );
+
+      const data: RepoData[] = responses
+        .filter(
+          (r): r is PromiseFulfilledResult<RepoData> =>
+            r.status === "fulfilled"
+        )
+        .map((r) => r.value);
+
+      setRepos(data);
+    } catch {
+      setError("Failed to load contributed repos from GitHub.");
     } finally {
       setLoading(false);
     }
@@ -306,6 +355,7 @@ function Nav() {
       <ul className="nav-links">
         {[
           ["projects", "Projects"],
+          ["open-source", "Open Source"],
           ["contributions", "Activity"],
         ].map(([id, label]) => (
           <li key={id}>
@@ -549,6 +599,49 @@ function ProjectsSection() {
   );
 }
 
+// ─── Open Source Contributions Section ──────────────────────────────────
+function OpenSourceSection() {
+  const { repos, loading, error } = useContributedRepos();
+
+  return (
+    <section id="open-source" className="projects-section">
+      <div className="section-wrap">
+        <div className="section-header reveal">
+          <span className="section-label">~/open-source</span>
+          <h2 className="section-title">Open Source Contributions</h2>
+          <p className="section-subtitle">
+            Repositories I&rsquo;ve contributed to outside of my own projects.
+          </p>
+        </div>
+
+        {error && (
+          <div className="error-state reveal">
+            <div className="error-state-title">
+              Couldn&rsquo;t load repos
+            </div>
+            <p className="error-state-desc">{error}</p>
+          </div>
+        )}
+
+        <div className="projects-grid">
+          {loading
+            ? Array.from({ length: CONTRIBUTED_REPOS.length }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))
+            : repos.map((repo, i) => (
+                <div
+                  key={repo.full_name}
+                  className={`reveal reveal-d${(i % 4) + 1}`}
+                >
+                  <ProjectCard repo={repo} />
+                </div>
+              ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Contribution Graph ──────────────────────────────────────────────────
 function ContributionSection() {
   return (
@@ -638,6 +731,7 @@ export default function Home() {
       <main id="main-content">
         <HeroSection />
         <ProjectsSection />
+        <OpenSourceSection />
         <ContributionSection />
       </main>
       <Footer />
