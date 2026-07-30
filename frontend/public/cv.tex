@@ -1,0 +1,203 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{moresize}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, linkcolor=customblue, urlcolor=customblue, citecolor=customblue]{hyperref}
+\usepackage{xcolor} 
+\usepackage{enumitem}
+\usepackage{shadowtext}
+\usepackage{xstring}
+\geometry{top = 0.8cm, bottom = 0.8cm, left = 1.5cm, right = 1.5cm}
+
+%%%%%%% custom commands %%%%%%%
+\definecolor{customblue}{RGB}{31, 56, 98}
+
+\newcommand{\TitleShadow}[1]{
+  \hspace{-0.4cm}
+  \shadowtext{\fontsize{16pt}{22pt}\selectfont {\StrLeft{#1}{1}}}%
+  \shadowtext{\fontsize{12pt}{18pt}\selectfont \hspace{-0.5em}\StrGobbleLeft{#1}{1}}%
+}
+
+\newenvironment{workexperience}[4]{
+    \noindent
+    \large \textbf{#1} \\ [0.1cm]
+    \normalsize 
+    \begin{tabular}{@{}l@{\hspace{0.5cm}}l@{}}
+      #2, #3 & \textcolor{customblue}{\textit{\textsf{#4}}}  
+    \end{tabular} 
+    \vspace{-0.15cm}
+    \fontsize{9.5pt}{12pt}\selectfont
+    \begin{itemize}[leftmargin=0.6cm, labelsep=0.3cm, itemsep=-0.05cm]
+}{
+    \end{itemize}
+}
+
+\newenvironment{education}[4]{
+    \noindent
+    \large \textbf{#1} \\ [0.1cm]
+    \normalsize 
+    \begin{tabular}{@{}l@{\hspace{0.5cm}}l@{}}
+      #2, #3 & \textcolor{customblue}{\textit{\textsf{#4}}} 
+    \end{tabular} 
+    \vspace{-0.2cm}
+    \fontsize{9pt}{12pt}\selectfont
+    \begin{itemize}[leftmargin=0.6cm, labelsep=0.3cm, itemsep=-0.08cm] 
+}{
+    \end{itemize}
+}
+
+\newenvironment{sideproject}[4]{
+    \noindent
+    \large \textbf{#1} \\ [0.1cm]
+    \normalsize 
+    \begin{tabular}{@{}l@{\hspace{0.5cm}}l@{}}
+      #2, #3 & \textcolor{customblue}{\textit{\textsf{#4}}} 
+    \end{tabular} 
+    \vspace{-0.2cm}
+    \fontsize{9pt}{12pt}\selectfont
+    \begin{itemize}[leftmargin=0.6cm, labelsep=0.3cm, itemsep=-0.08cm] 
+}{
+    \end{itemize}
+}
+
+
+%%%%%%% main content %%%%%%%
+\begin{document}
+\pagestyle{empty}
+
+\noindent
+% \begin{minipage}[t]{0.6\textwidth}
+%     \Huge \textbf{Danny Hsu} \\ [0.1cm]
+%     \large Front-end Engineer
+% \end{minipage}
+% \hfill
+% \begin{minipage}[t]{0.35\textwidth}
+%   \raggedleft
+%   \vspace{-0.5cm} 
+%   \begin{tabular}{@{}l@{}}
+%       \raisebox{-0.55ex}{\includegraphics[height=12pt]{icon/gmail.png}} \small \hspace{0.2cm} \textnormal{danny539425@gmail.com} \\ [0.12cm]
+%       \raisebox{-0.55ex}{\includegraphics[height=12pt]{icon/github.png}} \small \hspace{0.2cm} \href{https://github.com/Dannygod}{github.com/Dannygod} \\ [0.12cm]
+%       \raisebox{-0.55ex}{\includegraphics[height=12pt]{icon/linkedin_1.png}} \small \hspace{0.2cm} \href{https://www.linkedin.com/in/danny-hsu-profile/}{linkedin.com/in/danny-hsu-profile} \\ [0.12cm]
+%       \raisebox{-0.55ex}{\includegraphics[height=12pt]{icon/telephone.png}} \small \hspace{0.2cm} \textnormal{+886 966-508-844}
+%   \end{tabular}
+% \end{minipage} \\ 
+
+{\centering
+{\Huge\textbf{Danny Hsu}}
+\hspace{0.5cm}
+{\Large Front-end Engineer}
+\hfill
+\par}
+\vspace{0.1cm}
+{\centering
+\small
+\raisebox{-0.4ex}{\includegraphics[height=10pt]{icon/gmail.png}}
+\hspace{0.1cm} danny539425@gmail.com
+\quad
+\raisebox{-0.4ex}{\includegraphics[height=10pt]{icon/github.png}}
+\hspace{0.1cm}
+\href{https://github.com/Dannygod}{GitHub}
+\quad
+\raisebox{-0.4ex}{\includegraphics[height=10pt]{icon/linkedin_1.png}}
+\hspace{0.1cm}
+\href{https://linkedin.com/in/danny-hsu-profile}{LinkedIn}
+\quad
+\raisebox{-0.4ex}{\includegraphics[height=10pt]{icon/telephone.png}}
+\hspace{0.1cm}
++886 966-508-844
+\vspace{-0.2cm}
+\par}
+
+\noindent\rule{\textwidth}{0.4pt} 
+
+\vspace{-0.5cm}
+\section*{\TitleShadow{SUMMARY}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{0.05cm}
+
+\vspace{-0.4cm}
+\fontsize{9.5pt}{11pt}\selectfont
+\noindent
+Front-end engineer with hands-on industry experience delivering production-grade Angular and React applications at VIA Technologies. 
+Specialized in building data-intensive enterprise UIs, RESTful API integration, and responsive cross-device interfaces. 
+Graduated with a B.S. in Computer Science from National Taiwan Normal University and seeking a full-time front-end or software engineering position.
+
+\vspace{-0.4cm}
+
+\section*{\TitleShadow{EXPERIENCE}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{-0.25cm}
+
+\begin{workexperience}{Front-end Engineer Intern}{VIA Technologies, Inc. — IT Application Team}{Taipei}{\textbar\ \,Jun 2025 \textasciitilde\ Jan 2026}
+    \item Delivered core modules for TVBS's advertisement operations platform using \textbf{Angular} and \textbf{TypeScript}, replacing spreadsheet-based workflows for 50+ internal business users.
+
+    \item Automated advertising KPI calculations—including impressions, CTR, list price, and sale price—and integrated RESTful APIs across booking, scheduling, and pricing systems.
+
+    \item Developed complex reactive forms, validation logic, asynchronous workflows, and responsive desktop/tablet interfaces using CSS Flexbox and Grid.
+
+    \item Supported production deployments through a CI/CD pipeline using \textbf{Docker}, \textbf{Nginx}, and Linux-based virtual machines.
+
+    \item Collaborated across time zones with PMs and backend engineers in Taipei and Shenzhen as one of two front-end engineers, consistently delivering business-critical features on schedule.
+\end{workexperience}
+
+\vspace{-0.1cm}
+
+\begin{workexperience}{Front-end Web Development Instructor}{NTNU CSIE Camp}{Taipei}{Jul 2023 \& Jul 2024}
+    \item Taught HTML, CSS, and Python fundamentals to 120+ high school students across two annual coding camps.
+    \item Designed a 10-level project-based curriculum with progressive hands-on exercises, achieving an 80\%+ project completion rate.
+    \item Delivered 12+ hours of interactive instruction; mentored students through live coding, debugging, and full website development.
+\end{workexperience}
+
+\vspace{-0.5cm}
+
+\section*{\TitleShadow{EDUCATION}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{-0.25cm}
+
+\begin{education}{Bachelor of Science in Computer Science and Information Engineering}{National Taiwan Normal University (NTNU)}{Taipei}{Sep 2022 \textasciitilde\ Jul 2026 (expected)}
+    \item Relevant Coursework: Data Structures \& Algorithms, Software Engineering, Systems Programming, Database Theory, Computer Organization \& Architecture, Object-Oriented Analysis \& Design.
+\end{education}
+\vspace{-0.6cm}
+
+\section*{\TitleShadow{COMPETITION}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{-0.25cm}
+
+\begin{sideproject}{Taipei Fall Coding Festival Hackathon}{Dept.\ of Information Technology, Taipei City Government}{Taipei}{Nov 2025}
+    \item \textbf{Top 15 / 80 teams} — advanced to the final round.
+    \item Built an interactive \textbf{Mapbox}-based safety map for Town Pass (Taipei City's official civic app) using \textbf{Vue} inside a Flutter WebView, surfacing the three nearest safety points of interest (cooling shelters, AED locations, real-time AQI) based on the user's live location.
+    \item Designed end-to-end UX flow and responsive component architecture under hackathon time constraints.
+\end{sideproject}
+
+\vspace{-0.7cm}
+
+\section*{\TitleShadow{PROJECTS}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{-0.25cm}
+
+\begin{sideproject}{Baseball Stats Platform for CPBL}{\href{https://github.com/Dannygod/baseball\_stats}{github.com/Dannygod/baseball\_stats}}{}{May 2025}
+    \item Built a full-stack web application displaying real-time statistics for CPBL games, teams, and players.
+    \item Frontend: \textbf{React} + \textbf{Next.js}; backend APIs: \textbf{Python Flask}; deployed on Vercel and Zeabur.
+\end{sideproject}
+
+\vspace{-0.6cm}
+\section*{\TitleShadow{SKILLS}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+
+\fontsize{10pt}{14pt}\selectfont
+\noindent \textbf{Languages:} TypeScript, JavaScript, Python, C, C++, Java \\ [0.08cm]
+\textbf{Frameworks \& Libraries:} React, Next.js, Vue, Angular, Svelte, Vite, Node.js, Flask, MongoDB \\ [0.08cm]
+\textbf{Tools \& Platforms:} Git, Docker, Nginx, CI/CD, Linux, Vercel, Zeabur, Figma \\ [0.08cm]
+\textbf{Practices:} UI/UX Design, OOP, Agile / Scrum, RESTful API Integration \\ [0.08cm]
+\textbf{Languages:} Mandarin Chinese (Native), English (TOEIC 765)
+
+\end{document}
+
+% This LaTeX template is created by Chang-Ju (Clement) Lee.
+% Redistribution is allowed but attribution is required.

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { GITHUB_USERNAME } from "../config";
 
-// ─── Inline SVG Icons (kept here to avoid importing from a Server module) ─
+// ─── Brand icons (not in lucide — need filled versions) ───────────────────
 
 function IconGitHub() {
   return (
@@ -46,8 +46,8 @@ export function Nav() {
 
       <ul className="nav-links">
         {[
+          ["about", "About"],
           ["projects", "Projects"],
-          ["open-source", "Open Source"],
           ["contributions", "Activity"],
         ].map(([id, label]) => (
           <li key={id}>

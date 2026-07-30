@@ -16,23 +16,59 @@ export interface RepoData {
   updated_at: string;
 }
 
-// 🔧 Edit this array to choose which repos to showcase on your portfolio
+// ─── Pinned repos — use the full GitHub URL ──────────────────────────────
+// New structure: { repo_url, customName, slug }
+// repo_url: full GitHub URL e.g. "https://github.com/owner/repo"
 export const PINNED_REPOS = [
-  { repo: "portfolio", customName: "Portfolio (This Page)", slug: "portfolio" },
-  { repo: "emotional-critter-haven", customName: "Moomo 沐哞 — 把碎念交給你的小怪獸", slug: "critter-haven" },
-  { repo: "MasterGrammer", customName: "Grammar Master - with + O + OC 複合結構挑戰", slug: "master-grammer" },
-  { repo: "DoorsOfWorld", customName: "君不見，青海頭 — 中國與歐洲的戰爭門類建築展", slug: "doors-of-world" },
-  { repo: "baseball_stats", customName: "中華職棒-棒球資訊共享平台", slug: "baseball_stats" }
+  {
+    repo_url: "https://github.com/Dannygod/portfolio",
+    customName: "Portfolio (This Page)",
+    slug: "portfolio",
+  },
+  {
+    repo_url: "https://github.com/Dannygod/emotional-critter-haven",
+    customName: "Moomo 沐哞 — 把碎念交給你的小怪獸",
+    slug: "critter-haven",
+  },
+  
+  {
+    repo_url: "https://github.com/Dannygod/DoorsOfWorld",
+    customName: "君不見，青海頭 — 中國與歐洲的戰爭門類建築展",
+    slug: "doors-of-world",
+  },
+  {
+    repo_url: "https://github.com/Dannygod/MasterGrammer",
+    customName: "Grammar Master — with + O + OC 複合結構挑戰",
+    slug: "master-grammer",
+  },
+  {
+    repo_url: "https://github.com/Dannygod/Camp_website_2024",
+    customName: "你們在code什麼 — 2024資工營網站",
+    slug: "camp_website_2024",
+  },
+  {
+    repo_url: "https://github.com/Dannygod/Camp_website_2023",
+    customName: "E級玩家 — 2023資工營網站",
+    slug: "camp_website_2023",
+  },
+  {
+    repo_url: "https://github.com/Dannygod/Slot_Machine",
+    customName: "拉霸機",
+    slug: "baseball_stats",
+  },
+  {
+    repo_url: "https://github.com/Dannygod/baseball_stats",
+    customName: "中華職棒 — 棒球資訊共享平台",
+    slug: "baseball_stats",
+  }
 ];
 
-// 🔧 Repos you contributed to but don't own — use the full GitHub URL
-export const CONTRIBUTED_REPOS = [
-  "https://github.com/CSIE-Camp/Camp_website_2024",
-  "https://github.com/CSIE-Camp/website-frontend",
-  "https://github.com/CSIE-Camp/Slot_Machine",
-  "https://github.com/Dannygod/TownPass",
-  "https://github.com/Dannygod/frontend"
-];
+// ─── Helper — parse owner/repo from a GitHub URL ─────────────────────────
+export function parseRepoUrl(repo_url: string): { owner: string; repo: string } {
+  const path = repo_url.replace("https://github.com/", "");
+  const [owner, repo] = path.split("/");
+  return { owner, repo };
+}
 
 // Language colors (GitHub-style)
 export const LANG_COLORS: Record<string, string> = {

@@ -5,11 +5,21 @@ import {
   LANG_COLORS,
   RepoData,
 } from "./config";
-import { fetchPinnedRepos, fetchContributedRepos } from "./lib/github";
+import { fetchPinnedRepos } from "./lib/github";
 import { Nav } from "./components/Nav";
 import { ScrollReveal } from "./components/ScrollReveal";
+import {
+  ExternalLink,
+  Star,
+  GitFork,
+  FolderGit2,
+  Mail,
+  MapPin,
+  ArrowRight,
+  FileUser,
+} from "lucide-react";
 
-// ─── SVG Icons (pure presentation — safe in Server Components) ────────────
+// ─── Brand icons (not in lucide) ──────────────────────────────────────────
 
 function IconGitHub({ className }: { className?: string }) {
   return (
@@ -19,76 +29,10 @@ function IconGitHub({ className }: { className?: string }) {
   );
 }
 
-function IconExternalLink({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-      <polyline points="15 3 21 3 21 9" />
-      <line x1="10" y1="14" x2="21" y2="3" />
-    </svg>
-  );
-}
-
-function IconStar({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-  );
-}
-
-function IconFork({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="18" r="3" />
-      <circle cx="6" cy="6" r="3" />
-      <circle cx="18" cy="6" r="3" />
-      <path d="M18 9a9 9 0 0 1-9 9" />
-      <path d="M6 9a9 9 0 0 0 9 9" />
-    </svg>
-  );
-}
-
-function IconRepo({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4" />
-      <path d="M9 18c-4.51 2-5-2-7-2" />
-    </svg>
-  );
-}
-
 function IconLinkedIn({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-    </svg>
-  );
-}
-
-function IconMail({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect width="20" height="16" x="2" y="4" rx="2" />
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-    </svg>
-  );
-}
-
-function IconMapPin({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  );
-}
-
-export function IconArrowRight({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
     </svg>
   );
 }
@@ -114,16 +58,13 @@ function HeroSection() {
           <span className="hero-username">@{GITHUB_USERNAME}</span>
           <h1 className="hero-name">Danny Hsu</h1>
           <p className="hero-tagline">
-            <strong>Front-end Engineer</strong> &amp; CS student at NTNU. I craft
-            thoughtful digital interfaces with <strong>React</strong>,{" "}
-            <strong>TypeScript</strong>, and <strong>Angular</strong> — turning
-            ideas into polished, performant web experiences.
+            <strong>Front-end Engineer</strong> with 3+ years of experience building web applications using React, Angular, TypeScript, and Next.js. Completed nearly one year of software engineering internship experience, delivering production-ready features from design to deployment.
           </p>
 
           {/* Meta */}
           <div className="hero-meta">
             <span className="hero-meta-item">
-              <IconMapPin />
+              <MapPin size={16} />
               Taipei, Taiwan
             </span>
             <span className="hero-meta-item">
@@ -137,7 +78,7 @@ function HeroSection() {
             </span>
           </div>
 
-          {/* Social buttons */}
+          {/* Social buttons + CV */}
           <div className="hero-socials">
             <a
               href={`https://github.com/${GITHUB_USERNAME}`}
@@ -162,8 +103,124 @@ function HeroSection() {
               className="hero-social-btn"
               aria-label="Email"
             >
-              <IconMail />
+              <Mail size={18} />
             </a>
+            {/* CV Download CTA */}
+            <a href="/cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="about-cv-btn"
+              aria-label="Download CV"
+            >
+              <FileUser />
+              View CV
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── About / Experience Section ───────────────────────────────────────────
+function AboutSection() {
+  const skills = [
+    "TypeScript", "React", "Next.js", "Angular",
+    "Vue", "Node.js", "Python", "Flask",
+    "Docker", "CI/CD", "Git", "Figma",
+  ];
+
+  return (
+    <section id="about" className="about-section">
+      <div className="section-wrap">
+        <div className="section-header reveal">
+          <span className="section-label">~/about</span>
+          <h2 className="section-title">About Me</h2>
+          <p className="section-subtitle">
+            Front-end engineer with industry experience building enterprise-grade web applications.
+          </p>
+        </div>
+
+        <div className="about-grid">
+          {/* Left — Bio + Skills + CV */}
+          <div className="about-bio-col reveal reveal-d1">
+            <p className="about-bio-text">
+              Front-end engineer with hands-on industry experience delivering production-grade Angular and React applications at VIA Technologies. Specialized in building data-intensive enterprise UIs, RESTful API integration, and responsive cross-device interfaces.
+              Graduated with a B.S. in Computer Science from National Taiwan Normal University and seeking a full-time front-end or software
+              engineering position.
+            </p>
+            <p className="about-bio-text">
+              
+            </p>
+
+            {/* Skills */}
+            <div className="about-skills">
+              <div className="about-skills-label">CORE SKILLS</div>
+              <div className="about-skills-chips">
+                {skills.map((s) => (
+                  <span key={s} className="skill-chip">{s}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right — Experience Timeline */}
+          <div className="about-timeline-col reveal reveal-d2">
+            <div className="timeline">
+
+              {/* VIA Technologies */}
+              <div className="timeline-item">
+                <div className="timeline-dot" />
+                <div className="timeline-period">Jun 2025 – Jan 2026</div>
+                <div className="timeline-role">Front-end Engineer Intern</div>
+                <div className="timeline-org">VIA Technologies, Inc. · Taipei</div>
+                <ul className="timeline-bullets">
+                  <li>Built core modules of TVBS&rsquo;s ad operations platform (Angular + TypeScript), replacing spreadsheets for 50+ users</li>
+                  <li>Automated KPI calculations — impressions, CTR, list/sale price — integrating booking & scheduling APIs</li>
+                  <li>Supported CI/CD deployments with Docker, Nginx, and Linux VMs</li>
+                </ul>
+                <span className="timeline-tag">Angular · TypeScript · Docker</span>
+              </div>
+
+              {/* CSIE Camp Instructor */}
+              <div className="timeline-item">
+                <div className="timeline-dot" />
+                <div className="timeline-period">Jul 2023 & Jul 2024</div>
+                <div className="timeline-role">Front-end Instructor</div>
+                <div className="timeline-org">NTNU CSIE Camp · Taipei</div>
+                <ul className="timeline-bullets">
+                  <li>Taught HTML, CSS & Python to 120+ high school students across two annual camps</li>
+                  <li>Designed a 10-level project curriculum with 80%+ completion rate</li>
+                </ul>
+                <span className="timeline-tag">HTML · CSS · Python</span>
+              </div>
+
+              {/* Education */}
+              <div className="timeline-item">
+                <div className="timeline-dot" />
+                <div className="timeline-period">Sep 2022 – Jul 2026 (expected)</div>
+                <div className="timeline-role">B.S. Computer Science & Information Engineering</div>
+                <div className="timeline-org">National Taiwan Normal University (NTNU) · Taipei</div>
+                <ul className="timeline-bullets">
+                  <li>Relevant courses: Data Structures & Algorithms, Software Engineering, Database Theory, OOP, Systems Programming</li>
+                </ul>
+                <span className="timeline-tag">NTNU · CS</span>
+              </div>
+
+              {/* Hackathon */}
+              <div className="timeline-item">
+                <div className="timeline-dot" />
+                <div className="timeline-period">Nov 2025</div>
+                <div className="timeline-role">Taipei Fall Coding Festival Hackathon</div>
+                <div className="timeline-org">Dept. of Information Technology, Taipei City Gov.</div>
+                <ul className="timeline-bullets">
+                  <li><strong>Top 15 / 80 teams</strong> — advanced to the final round</li>
+                  <li>Built Mapbox safety map for Town Pass (Taipei&rsquo;s civic app) using React in Flutter WebView</li>
+                </ul>
+                <span className="timeline-tag">React · Mapbox · Top 15</span>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
@@ -181,7 +238,7 @@ function ProjectCard({ repo }: { repo: RepoData }) {
     <div className="project-card">
       <div className="project-card-top">
         <div className="project-icon">
-          <IconRepo />
+          <FolderGit2 size={20} />
         </div>
         <div className="project-links">
           <a
@@ -201,7 +258,7 @@ function ProjectCard({ repo }: { repo: RepoData }) {
               className="project-link"
               aria-label={`Visit ${repo.name} live demo`}
             >
-              <IconExternalLink />
+              <ExternalLink size={16} />
             </a>
           )}
         </div>
@@ -224,28 +281,14 @@ function ProjectCard({ repo }: { repo: RepoData }) {
           </span>
         )}
 
-        <div className="project-stats">
-          {repo.stargazers_count > 0 && (
-            <span className="project-stat">
-              <IconStar />
-              {repo.stargazers_count}
-            </span>
-          )}
-          {repo.forks_count > 0 && (
-            <span className="project-stat">
-              <IconFork />
-              {repo.forks_count}
-            </span>
-          )}
-        </div>
+        {repo.slug && (
+          <div className="project-details-wrap">
+            <Link href={`/projects/${repo.slug}`} className="project-details-btn">
+              View Details
+            </Link>
+          </div>
+        )}
       </div>
-      {repo.slug && (
-        <div className="project-details-wrap">
-          <Link href={`/projects/${repo.slug}`} className="project-details-btn">
-            View Details
-          </Link>
-        </div>
-      )}
     </div>
   );
 }
@@ -257,7 +300,7 @@ function ProjectsSection({ repos }: { repos: RepoData[] }) {
       <div className="section-wrap">
         <div className="section-header reveal">
           <span className="section-label">~/projects</span>
-          <h2 className="section-title">Pinned Projects</h2>
+          <h2 className="section-title">Projects</h2>
           <p className="section-subtitle">
             Featured repositories from my GitHub — things I&rsquo;ve built,
             contributed to, and learned from.
@@ -268,34 +311,6 @@ function ProjectsSection({ repos }: { repos: RepoData[] }) {
           {repos.map((repo, i) => (
             <div
               key={repo.name}
-              className={`reveal reveal-d${(i % 4) + 1}`}
-            >
-              <ProjectCard repo={repo} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Open Source Contributions Section ──────────────────────────────────
-function OpenSourceSection({ repos }: { repos: RepoData[] }) {
-  return (
-    <section id="open-source" className="projects-section">
-      <div className="section-wrap">
-        <div className="section-header reveal">
-          <span className="section-label">~/open-source</span>
-          <h2 className="section-title">Open Source Contributions</h2>
-          <p className="section-subtitle">
-            Repositories I&rsquo;ve contributed to outside of my own projects.
-          </p>
-        </div>
-
-        <div className="projects-grid">
-          {repos.map((repo, i) => (
-            <div
-              key={repo.full_name}
               className={`reveal reveal-d${(i % 4) + 1}`}
             >
               <ProjectCard repo={repo} />
@@ -338,7 +353,7 @@ function ContributionSection() {
             rel="noopener noreferrer"
             className="contrib-label-link"
           >
-            View on GitHub <IconArrowRight />
+            View on GitHub <ArrowRight size={14} />
           </a>
         </div>
       </div>
@@ -351,7 +366,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <p className="footer-copy">&copy; 2026 Danny Hsu. All rights reserved.</p>
+        <p className="footer-copy">&copy; {new Date().getFullYear()} Danny Hsu. All rights reserved.</p>
 
         <div className="footer-links">
           <a
@@ -373,7 +388,7 @@ function Footer() {
             LinkedIn
           </a>
           <a href="mailto:danny539425@gmail.com" className="footer-link">
-            <IconMail />
+            <Mail size={18} />
             Email
           </a>
         </div>
@@ -388,11 +403,7 @@ function Footer() {
 
 // ─── Page (Server Component — async) ──────────────────────────────────────
 export default async function Home() {
-  // Fetch data on the server — authenticated with GITHUB_TOKEN
-  const [pinnedRepos, contributedRepos] = await Promise.all([
-    fetchPinnedRepos(),
-    fetchContributedRepos(),
-  ]);
+  const pinnedRepos = await fetchPinnedRepos();
 
   return (
     <>
@@ -400,8 +411,8 @@ export default async function Home() {
       <Nav />
       <main id="main-content">
         <HeroSection />
+        <AboutSection />
         <ProjectsSection repos={pinnedRepos} />
-        <OpenSourceSection repos={contributedRepos} />
         <ContributionSection />
       </main>
       <Footer />

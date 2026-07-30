@@ -1,8 +1,7 @@
 import {
-  GITHUB_USERNAME,
   PINNED_REPOS,
-  CONTRIBUTED_REPOS,
   RepoData,
+  parseRepoUrl,
 } from "../config";
 
 // ─── Authenticated GitHub Fetch ──────────────────────────────────────────
@@ -29,10 +28,11 @@ async function githubFetch(url: string): Promise<Response> {
 export async function fetchPinnedRepos(): Promise<RepoData[]> {
   const responses = await Promise.allSettled(
     PINNED_REPOS.map(async (pinned) => {
+      const { owner, repo } = parseRepoUrl(pinned.repo_url);
       const res = await githubFetch(
-        `https://api.github.com/repos/${GITHUB_USERNAME}/${pinned.repo}`
+        `https://api.github.com/repos/${owner}/${repo}`
       );
-      if (!res.ok) throw new Error(`${pinned.repo}: ${res.status}`);
+      if (!res.ok) throw new Error(`${owner}/${repo}: ${res.status}`);
       const json = await res.json();
       return {
         ...json,
@@ -49,23 +49,32 @@ export async function fetchPinnedRepos(): Promise<RepoData[]> {
     .map((r) => r.value);
 }
 
-export async function fetchContributedRepos(): Promise<RepoData[]> {
-  const responses = await Promise.allSettled(
-    CONTRIBUTED_REPOS.map(async (url) => {
-      const path = url.replace("https://github.com/", "");
-      const res = await githubFetch(
-        `https://api.github.com/repos/${path}`
-      );
-      if (!res.ok) throw new Error(`${path}: ${res.status}`);
-      return (await res.json()) as RepoData;
-    })
-  );
+// ─── Fetch Language Breakdown ─────────────────────────────────────────────
+// Returns a Record<string, number> of language → bytes for a given repo.
+// Accepts either owner+repo strings OR a full repo_url.
 
-  return responses
-    .filter(
-      (r): r is PromiseFulfilledResult<RepoData> => r.status === "fulfilled"
-    )
-    .map((r) => r.value);
+export async function fetchRepoLanguages(
+  ownerOrUrl: string,
+  repo?: string
+): Promise<Record<string, number>> {
+  let owner: string;
+  let repoName: string;
+
+  if (repo === undefined) {
+    // Called with a full URL
+    const parsed = parseRepoUrl(ownerOrUrl);
+    owner = parsed.owner;
+    repoName = parsed.repo;
+  } else {
+    owner = ownerOrUrl;
+    repoName = repo;
+  }
+
+  const res = await githubFetch(
+    `https://api.github.com/repos/${owner}/${repoName}/languages`
+  );
+  if (!res.ok) return {};
+  return res.json();
 }
 
 export { githubFetch };

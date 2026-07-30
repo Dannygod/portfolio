@@ -5,12 +5,21 @@ import remarkGfm from "remark-gfm";
 import "../../style/style.css";
 import {
   PINNED_REPOS,
-  GITHUB_USERNAME,
+  LANG_COLORS,
+  parseRepoUrl,
 } from "../../config";
-import { githubFetch } from "../../lib/github";
-import { IconArrowRight } from "../../page";
+import { githubFetch, fetchRepoLanguages } from "../../lib/github";
+import { SidebarCollapse } from "../../components/SidebarCollapse";
+import {
+  ArrowLeft,
+  ExternalLink,
+  Star,
+  GitFork,
+  Calendar,
+  Clock,
+} from "lucide-react";
 
-// ─── Inline icons for this page ───────────────────────────────────────────
+// ─── Brand icon (not in lucide) ───────────────────────────────────────────
 
 function IconGitHub() {
   return (
@@ -20,54 +29,81 @@ function IconGitHub() {
   );
 }
 
-function IconExternalLink() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-      <polyline points="15 3 21 3 21 9" />
-      <line x1="10" y1="14" x2="21" y2="3" />
-    </svg>
-  );
-}
-
-function IconStar() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-  );
-}
-
-function IconFork() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="18" r="3" />
-      <circle cx="6" cy="6" r="3" />
-      <circle cx="18" cy="6" r="3" />
-      <path d="M18 9a9 9 0 0 1-9 9" />
-      <path d="M6 9a9 9 0 0 0 9 9" />
-    </svg>
-  );
-}
-
 // ─── Transform relative GitHub markdown image URLs to raw URLs ────────────
 
-function fixRelativeLinks(content: string, repo: string, defaultBranch: string) {
-  const baseUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${repo}/${defaultBranch}/`;
+function fixRelativeLinks(content: string, owner: string, repo: string, defaultBranch: string) {
+  const baseUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${defaultBranch}/`;
 
-  // Replace Markdown image relative links: ![alt](./path) -> ![alt](baseUrl/path)
   let newContent = content.replace(/!\[([^\]]*)\]\((?!http|https|#)(.*?)\)/g, (_match, alt, url) => {
     const cleanUrl = url.replace(/^\.\/|^\//, "");
     return `![${alt}](${baseUrl}${cleanUrl})`;
   });
 
-  // HTML img tags: <img src="./path">
   newContent = newContent.replace(/<img[^>]+src=["'](?!http|https|#)([^"']+)["'][^>]*>/g, (match, url) => {
     const cleanUrl = url.replace(/^\.\/|^\//, "");
     return match.replace(url, `${baseUrl}${cleanUrl}`);
   });
 
   return newContent;
+}
+
+// ─── Extract headings for Table of Contents ───────────────────────────────
+
+interface TocItem {
+  level: number;
+  text: string;
+  slug: string;
+}
+
+function extractToc(markdown: string): TocItem[] {
+  const headingRegex = /^(#{1,2})\s+(.+)$/gm;
+  const items: TocItem[] = [];
+  let match;
+
+  while ((match = headingRegex.exec(markdown)) !== null) {
+    const level = match[1].length;
+    const text = match[2].replace(/[*_`\[\]()]/g, "").trim();
+    const rawSlug = text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .trim();
+
+    const slug = rawSlug || "section";
+
+    if (text) {
+      items.push({ level, text, slug });
+    }
+  }
+
+  return items;
+}
+
+// ─── Format date helper ──────────────────────────────────────────────────
+
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+// ─── Language bar data ───────────────────────────────────────────────────
+
+function getLanguageBreakdown(languages: Record<string, number>) {
+  const total = Object.values(languages).reduce((sum, v) => sum + v, 0);
+  if (total === 0) return [];
+
+  return Object.entries(languages)
+    .sort(([, a], [, b]) => b - a)
+    .map(([name, bytes]) => ({
+      name,
+      percentage: ((bytes / total) * 100).toFixed(1),
+      color: LANG_COLORS[name] || "#6b7280",
+    }));
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────
@@ -84,10 +120,13 @@ export default async function ProjectPage({
     notFound();
   }
 
-  // Fetch Repo Data (authenticated, cached 1hr)
-  const repoRes = await githubFetch(
-    `https://api.github.com/repos/${GITHUB_USERNAME}/${project.repo}`
-  );
+  const { owner, repo } = parseRepoUrl(project.repo_url);
+
+  // Fetch repo data + languages in parallel
+  const [repoRes, languages] = await Promise.all([
+    githubFetch(`https://api.github.com/repos/${owner}/${repo}`),
+    fetchRepoLanguages(owner, repo),
+  ]);
 
   if (!repoRes.ok) {
     notFound();
@@ -96,48 +135,98 @@ export default async function ProjectPage({
   const repoData = await repoRes.json();
   const defaultBranch = repoData.default_branch || "main";
 
-  // Fetch README.md (raw content, no API auth needed)
+  // Fetch README.md
   const readmeRes = await fetch(
-    `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${project.repo}/${defaultBranch}/README.md`,
+    `https://raw.githubusercontent.com/${owner}/${repo}/${defaultBranch}/README.md`,
     { next: { revalidate: 3600 } }
   );
 
   let readmeContent = "";
   if (readmeRes.ok) {
     readmeContent = await readmeRes.text();
-    readmeContent = fixRelativeLinks(readmeContent, project.repo, defaultBranch);
+    readmeContent = fixRelativeLinks(readmeContent, owner, repo, defaultBranch);
   } else {
     readmeContent = "_No README found for this repository._";
   }
 
+  const toc = extractToc(readmeContent);
+  const langBreakdown = getLanguageBreakdown(languages);
+
   return (
-    <div className="page-wrapper" style={{ minHeight: "100vh", background: "var(--bg-main)" }}>
-      <nav className="nav scrolled" style={{ position: "relative", marginBottom: "20px" }}>
-        <Link href="/#projects" className="nav-logo" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <div style={{ transform: "rotate(180deg)", display: "flex" }}>
-            <IconArrowRight />
-          </div>
+    <div className="project-page">
+      {/* ─── Sidebar ─── */}
+      <aside className="project-sidebar">
+        {/* Back link */}
+        <Link href="/#projects" className="sidebar-back">
+          <ArrowLeft size={16} />
           Back to Portfolio
         </Link>
-      </nav>
 
-      <main className="project-detail-main" style={{ maxWidth: "800px", margin: "0 auto", padding: "40px 24px" }}>
-        {/* Header section */}
-        <header style={{ marginBottom: "40px" }}>
-          <h1 style={{ fontSize: "2.5rem", fontWeight: 700, marginBottom: "16px", color: "var(--text-primary)" }}>
-            {project.customName}
-          </h1>
-          <p style={{ fontSize: "1.1rem", color: "var(--text-secondary)", marginBottom: "24px" }}>
-            {repoData.description}
-          </p>
+        {/* Project name */}
+        <h1 className="sidebar-title">{project.customName}</h1>
 
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center" }}>
+        {/* Collapsible section for mobile */}
+        <SidebarCollapse title="Project Details">
+          {/* Description */}
+          {repoData.description && (
+            <p className="sidebar-desc">{repoData.description}</p>
+          )}
+
+          {/* Language Bar */}
+          {langBreakdown.length > 0 && (
+            <div>
+              <div className="sidebar-section-label">Languages</div>
+              <div className="lang-bar">
+                {langBreakdown.map((lang) => (
+                  <div
+                    key={lang.name}
+                    className="lang-bar-segment"
+                    style={{
+                      width: `${lang.percentage}%`,
+                      background: lang.color,
+                    }}
+                    title={`${lang.name}: ${lang.percentage}%`}
+                  />
+                ))}
+              </div>
+              <div className="lang-list">
+                {langBreakdown.map((lang) => (
+                  <div key={lang.name} className="lang-list-item">
+                    <span
+                      className="lang-list-dot"
+                      style={{ background: lang.color }}
+                    />
+                    <span>{lang.name}</span>
+                    <span className="lang-list-pct">{lang.percentage}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Stats */}
+          {(repoData.stargazers_count > 0 || repoData.forks_count > 0) && (
+            <div className="sidebar-stats">
+              {repoData.stargazers_count > 0 && (
+                <span className="sidebar-stat">
+                  <Star size={16} /> {repoData.stargazers_count}
+                </span>
+              )}
+              {repoData.forks_count > 0 && (
+                <span className="sidebar-stat">
+                  <GitFork size={16} /> {repoData.forks_count}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Action buttons */}
+          <div className="sidebar-actions">
             <a
               href={repoData.html_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="project-details-btn"
-              style={{ gap: "8px" }}
+              className="sidebar-action-btn sidebar-action-btn--primary"
             >
               <IconGitHub /> View Repository
             </a>
@@ -146,34 +235,79 @@ export default async function ProjectPage({
                 href={repoData.homepage}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="project-details-btn"
-                style={{ gap: "8px", background: "var(--bg-subtle)", color: "var(--text-primary)", border: "1px solid var(--border)" }}
+                className="sidebar-action-btn sidebar-action-btn--secondary"
               >
-                <IconExternalLink /> Live Demo
+                <ExternalLink size={16} /> Live Demo
               </a>
             )}
-
-            <div className="project-stats" style={{ marginLeft: "auto" }}>
-              {repoData.stargazers_count > 0 && (
-                <span className="project-stat" style={{ fontSize: "0.9rem" }}>
-                  <IconStar /> {repoData.stargazers_count}
-                </span>
-              )}
-              {repoData.forks_count > 0 && (
-                <span className="project-stat" style={{ fontSize: "0.9rem" }}>
-                  <IconFork /> {repoData.forks_count}
-                </span>
-              )}
-            </div>
           </div>
-        </header>
 
-        {/* Content section */}
-        <article className="markdown-body">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {readmeContent}
-          </ReactMarkdown>
-        </article>
+          {/* Dates */}
+          <div className="sidebar-meta">
+            <span className="sidebar-meta-item">
+              <Calendar size={16} />
+              Created {formatDate(repoData.created_at)}
+            </span>
+            <span className="sidebar-meta-item">
+              <Clock size={16} />
+              Updated {formatDate(repoData.updated_at)}
+            </span>
+          </div>
+
+          {/* Table of Contents */}
+          {toc.length > 0 && (
+            <>
+              <div className="sidebar-divider" />
+              <div>
+                <div className="sidebar-section-label">On this page</div>
+                <nav className="sidebar-toc">
+                  {toc.map((item, index) => (
+                    <a
+                      key={`${item.slug}-${index}`}
+                      href={`#${item.slug}`}
+                      className={`sidebar-toc-item ${item.level === 2 ? "sidebar-toc-item--h2" : ""}`}
+                    >
+                      {item.text}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </>
+          )}
+        </SidebarCollapse>
+      </aside>
+
+      {/* ─── Content ─── */}
+      <main className="project-content">
+        <div className="project-content-inner">
+          {/* iframe preview */}
+          {repoData.homepage && (
+            <div className="project-iframe-wrap">
+              <div className="project-iframe-header">
+                <div className="project-iframe-dots">
+                  <span className="project-iframe-dot" />
+                  <span className="project-iframe-dot" />
+                  <span className="project-iframe-dot" />
+                </div>
+                <span className="project-iframe-url">{repoData.homepage}</span>
+              </div>
+              <iframe
+                className="project-iframe"
+                src={repoData.homepage}
+                title={`${project.customName} — Live Preview`}
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+              />
+            </div>
+          )}
+
+          {/* README */}
+          <article className="markdown-body">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {readmeContent}
+            </ReactMarkdown>
+          </article>
+        </div>
       </main>
     </div>
   );
