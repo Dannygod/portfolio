@@ -1,0 +1,180 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{moresize}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, linkcolor=customblue, urlcolor=customblue, citecolor=customblue]{hyperref}
+\usepackage{xcolor} 
+\usepackage{enumitem}
+\usepackage{shadowtext}
+\usepackage{xstring}
+\geometry{top = 0.8cm, bottom = 0.8cm, left = 1.5cm, right = 1.5cm}
+
+%%%%%%% custom commands %%%%%%%
+\definecolor{customblue}{RGB}{31, 56, 98}
+
+\newcommand{\TitleShadow}[1]{
+  \hspace{-0.4cm}
+  \shadowtext{\fontsize{16pt}{22pt}\selectfont {\StrLeft{#1}{1}}}%
+  \shadowtext{\fontsize{12pt}{18pt}\selectfont \hspace{-0.5em}\StrGobbleLeft{#1}{1}}%
+}
+
+\newenvironment{workexperience}[4]{
+    \noindent
+    \large \textbf{#1} \\ [0.1cm]
+    \normalsize 
+    \begin{tabular}{@{}l@{\hspace{0.5cm}}l@{}}
+      #2, #3 & \textcolor{customblue}{\textit{\textsf{#4}}}  
+    \end{tabular} 
+    \vspace{-0.15cm}
+    \fontsize{9.5pt}{12pt}\selectfont
+    \begin{itemize}[leftmargin=0.6cm, labelsep=0.3cm, itemsep=-0.05cm]
+}{
+    \end{itemize}
+}
+
+\newenvironment{education}[4]{
+    \noindent
+    \large \textbf{#1} \\ [0.1cm]
+    \normalsize 
+    \begin{tabular}{@{}l@{\hspace{0.5cm}}l@{}}
+      #2, #3 & \textcolor{customblue}{\textit{\textsf{#4}}} 
+    \end{tabular} 
+    \vspace{-0.2cm}
+    \fontsize{9pt}{12pt}\selectfont
+    \begin{itemize}[leftmargin=0.6cm, labelsep=0.3cm, itemsep=-0.08cm] 
+}{
+    \end{itemize}
+}
+
+\newenvironment{sideproject}[4]{
+    \noindent
+    \large \textbf{#1} \\ [0.1cm]
+    \normalsize 
+    \begin{tabular}{@{}l@{\hspace{0.5cm}}l@{}}
+      #2, #3 & \textcolor{customblue}{\textit{\textsf{#4}}} 
+    \end{tabular} 
+    \vspace{-0.2cm}
+    \fontsize{9pt}{12pt}\selectfont
+    \begin{itemize}[leftmargin=0.6cm, labelsep=0.3cm, itemsep=-0.08cm] 
+}{
+    \end{itemize}
+}
+
+
+%%%%%%% main content %%%%%%%
+\begin{document}
+\pagestyle{empty}
+
+\noindent
+
+{\centering
+{\Huge\textbf{Danny Hsu}}
+\hspace{0.5cm}
+{\Large DevOps Engineer}
+\hfill
+\par}
+\vspace{0.1cm}
+{\centering
+\small
+\raisebox{-0.4ex}{\includegraphics[height=10pt]{icon/gmail.png}}
+\hspace{0.1cm} danny539425@gmail.com
+\quad
+\raisebox{-0.4ex}{\includegraphics[height=10pt]{icon/github.png}}
+\hspace{0.1cm}
+\href{https://github.com/Dannygod}{GitHub}
+\quad
+\raisebox{-0.4ex}{\includegraphics[height=10pt]{icon/linkedin_1.png}}
+\hspace{0.1cm}
+\href{https://linkedin.com/in/danny-hsu-profile}{LinkedIn}
+\quad
+\raisebox{-0.4ex}{\includegraphics[height=10pt]{icon/telephone.png}}
+\hspace{0.1cm}
++886 966-508-844
+\vspace{-0.2cm}
+\par}
+
+\noindent\rule{\textwidth}{0.4pt} 
+
+\vspace{-0.5cm}
+\section*{\TitleShadow{SUMMARY}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{0.05cm}
+
+\vspace{-0.4cm}
+\fontsize{9.5pt}{11pt}\selectfont
+\noindent
+DevOps-oriented engineer with hands-on experience provisioning Linux-based private cloud infrastructure, containerizing production workloads with Docker, and deploying web services behind Nginx reverse proxies at VIA Technologies. 
+Skilled in writing CI/CD automation scripts, configuring VM networking, and managing remote servers via SSH. 
+B.S. in Computer Science from National Taiwan Normal University; seeking a full-time DevOps or Site Reliability Engineering role.
+
+\vspace{-0.5cm}
+
+\section*{\TitleShadow{EXPERIENCE}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{-0.25cm}
+
+\begin{workexperience}{Infrastructure \& DevOps Engineer Intern}{VIA Technologies, Inc. — IT Application Team}{Taipei}{\textbar\ \,Jun 2025 \textasciitilde\ Jan 2026}
+    \item Provisioned and configured \textbf{Linux virtual machines} on the company's private cloud, establishing network routing, firewall rules, and DNS records to host an internal enterprise platform serving 50+ users.
+
+    \item Authored \textbf{Docker Compose} manifests and custom \textbf{Shell scripts} to automate build, test, and deployment pipelines, reducing release cycle time from manual half-day processes to under 15 minutes.
+
+    \item Configured \textbf{Nginx} as a reverse proxy and static file server, implementing SSL termination, gzip compression, and caching policies to ensure high-availability frontend delivery.
+
+    \item Managed remote server administration via \textbf{SSH}, performing routine maintenance including log rotation, disk monitoring, package updates, and security patching across multiple VM instances.
+
+    \item Coordinated with MIS and senior DevOps engineers to request server resources, open network ports, and establish VPN tunnels, documenting all infrastructure changes in internal runbooks.
+
+    \item Developed automation scripts to streamline repetitive data-entry workflows, ensuring data integrity and consistency across the internal business operations platform.
+\end{workexperience}
+
+\vspace{-0.7cm}
+
+\section*{\TitleShadow{PROJECTS}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{-0.25cm}
+
+\begin{sideproject}{CPBL Baseball Stats Platform — Multi-Container Deployment}{\href{https://github.com/Dannygod/baseball\_stats}{github.com/Dannygod/baseball\_stats}}{}{May 2025}
+    \item Orchestrated a \textbf{3-service Docker Compose} stack (Next.js frontend, Flask API, MySQL database), ensuring dev/prod environment parity and eliminating "works on my machine" issues for a 3-person team.
+    \item Configured inter-container networking, persistent volumes for database storage, and health checks to enable reliable local development and one-command deployment.
+    \item Deployed the production frontend to \textbf{Vercel} and backend services to \textbf{Zeabur}, managing environment variables, build configs, and domain routing via \textbf{Cloudflare} DNS.
+\end{sideproject}
+
+\vspace{0.15cm}
+
+\begin{sideproject}{Taipei Fall Coding Festival Hackathon}{Dept.\ of Information Technology, Taipei City Government}{Taipei}{Nov 2025}
+    \item \textbf{Top 15 / 80 teams} — advanced to the final round in a 24-hour hackathon.
+    \item Containerized the full development environment with \textbf{Docker}, enabling 5 team members to spin up identical local stacks within minutes and iterate rapidly under time pressure.
+    \item Integrated 3 government open-data APIs (cooling shelters, AED locations, real-time AQI) into a unified backend service, designing fault-tolerant API calls with retry logic and caching.
+\end{sideproject}
+
+\vspace{-0.5cm}
+
+\section*{\TitleShadow{EDUCATION}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+\vspace{-0.25cm}
+
+\begin{education}{Bachelor of Science in Computer Science and Information Engineering}{National Taiwan Normal University (NTNU)}{Taipei}{Sep 2022 \textasciitilde\ Jul 2026}
+    \item Relevant Coursework: Operating Systems, Computer Networks, Systems Programming, Database Theory, Data Structures \& Algorithms, Computer Organization \& Architecture.
+\end{education}
+\vspace{-0.6cm}
+
+\section*{\TitleShadow{SKILLS}}
+\vspace{-0.5cm}
+\noindent\rule{\textwidth}{0.4pt} 
+
+\fontsize{10pt}{14pt}\selectfont
+\noindent \textbf{Infrastructure \& DevOps:} Docker, Docker Compose, Nginx, CI/CD Automation, Shell Scripting (Bash), SSH, Linux/Unix Administration \\ [0.08cm]
+\textbf{Networking:} TCP/IP, DNS, HTTP/HTTPS, Firewall Configuration, VPN, Reverse Proxy \\ [0.08cm]
+\textbf{Cloud \& Platforms:} Vercel, Zeabur, Cloudflare, Private Cloud / VM Provisioning \\ [0.08cm]
+\textbf{Programming:} Python, Bash, JavaScript/TypeScript, C/C++, Java \\ [0.08cm]
+\textbf{Tooling:} Git, GitHub, n8n (Workflow Automation) \\ [0.08cm]
+\textbf{Languages:} Mandarin Chinese (Native), English (TOEIC 765)
+
+\end{document}
+
+% This LaTeX template is created by Chang-Ju (Clement) Lee.
+% Redistribution is allowed but attribution is required.
