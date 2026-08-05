@@ -20,7 +20,10 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Danny Hsu — Portfolio",
   description:
-    "Danny Hsu — Front-end Engineer 整合後端API, PM要求 駕馭AI工具 講求效率、達成率的前端工程師"
+    "Danny Hsu — Front-end Engineer 整合後端API, PM要求 駕馭AI工具 講求效率、達成率的前端工程師",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({
