@@ -18,6 +18,8 @@ import {
   ArrowRight,
   FileUser,
 } from "lucide-react";
+import RoundCarousel from "./components/RoundCarousel";
+import TwinGalaxyRings from "./components/TwinGalaxyRings";
 
 // ─── Brand icons (not in lucide) ──────────────────────────────────────────
 
@@ -43,7 +45,7 @@ function HeroSection() {
     <section className="hero" id="home" aria-label="Introduction">
       <div className="hero-inner">
         {/* Avatar */}
-        <div className="hero-avatar-wrap">
+        {/* <div className="hero-avatar-wrap">
           <div className="hero-avatar">
             <img
               src={`https://avatars.githubusercontent.com/u/94232413?v=4`}
@@ -51,17 +53,17 @@ function HeroSection() {
             />
           </div>
           <div className="hero-status-dot" title="Available for hire" />
-        </div>
+        </div> */}
+        
 
         {/* Content */}
-        <div className="hero-content">
+        {/* <div className="hero-content">
           <span className="hero-username">@{GITHUB_USERNAME}</span>
           <h1 className="hero-name">Danny Hsu</h1>
           <p className="hero-tagline">
             <strong>Front-end Engineer</strong> with 3+ years of experience building web applications using React, Angular, TypeScript, and Next.js. Completed nearly one year of software engineering internship experience, delivering production-ready features from design to deployment.
           </p>
 
-          {/* Meta */}
           <div className="hero-meta">
             <span className="hero-meta-item">
               <MapPin size={16} />
@@ -78,7 +80,6 @@ function HeroSection() {
             </span>
           </div>
 
-          {/* Social buttons + CV */}
           <div className="hero-socials">
             <a
               href={`https://github.com/${GITHUB_USERNAME}`}
@@ -105,7 +106,6 @@ function HeroSection() {
             >
               <Mail size={18} />
             </a>
-            {/* CV Download CTA */}
             <a href="/cv.pdf"
               target="_blank"
               rel="noopener noreferrer"
@@ -116,7 +116,7 @@ function HeroSection() {
               View CV
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
@@ -306,7 +306,7 @@ function ProjectsSection({ repos }: { repos: RepoData[] }) {
             contributed to, and learned from.
           </p>
         </div>
-
+        
         <div className="projects-grid">
           {repos.map((repo, i) => (
             <div
@@ -410,8 +410,16 @@ export default async function Home() {
       <ScrollReveal />
       <Nav />
       <main id="main-content">
-        <HeroSection />
+        {/* <HeroSection/> */}
+        {/* Galaxy + Carousel overlay */}
+        <div className="galaxy-hero-wrapper">
+          <TwinGalaxyRings />
+          <div className="carousel-overlay">
+            <RoundCarousel background="" />
+          </div>
+        </div>
         <AboutSection />
+        {/* <CoverFlow /> */}
         <ProjectsSection repos={pinnedRepos} />
         <ContributionSection />
       </main>

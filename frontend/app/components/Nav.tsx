@@ -40,8 +40,8 @@ export function Nav() {
   return (
     <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
       <a href="#" className="nav-logo">
-        <span className="nav-logo-dot" />
-        ~/dannyhsu
+        {/* <span className="nav-logo-dot" /> */}
+        DANNY HSU
       </a>
 
       <ul className="nav-links">
