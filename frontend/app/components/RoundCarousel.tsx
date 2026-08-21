@@ -33,9 +33,12 @@ const DEFAULT_IMAGES: RoundCarouselImage[] = [
   { src: "https://iad.microlink.io/amC3lncfsCEtL14a3Z0mGQPDyyBUcX9AC4lkoDp_b6HcSVzDrFl7e3uBNvzzeQutiINttZqO3HKmGA4BHxDNQg.png" }, // camp 2023
   { src: "https://iad.microlink.io/nStrY_s9hasw9eRylmXG1SwFo2MJJl38kk8Oe5Evf4f5vYCNH6wW-KxmN25x6_edDVQrFxDXCKAbg0DAXQJQow.png" }, // camp 2024
   { src: "https://res.cloudinary.com/fjg7sazp/image/upload/v1786607133/team3.png" },
-  { src: "https://res.cloudinary.com/fjg7sazp/image/upload/v1786606318/title_TVBS2.png" },
+  { src: "https://res.cloudinary.com/fjg7sazp/image/upload/v1787041357/title_TVBS2.png" },
   { src: "https://res.cloudinary.com/fjg7sazp/image/upload/v1786675490/demo-t.gif" },
 ];
+
+/** Pre-exported URL list for image preloading (used by IntroAnimation) */
+export const CAROUSEL_IMAGE_URLS = DEFAULT_IMAGES.map((img) => img.src);
 
 export default function RoundCarousel({
   images = DEFAULT_IMAGES,

@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import RoundCarousel from "./components/RoundCarousel";
 import TwinGalaxyRings from "./components/TwinGalaxyRings";
+import IntroAnimation from "./components/IntroAnimation";
 
 // ─── Brand icons (not in lucide) ──────────────────────────────────────────
 
@@ -407,6 +408,7 @@ export default async function Home() {
 
   return (
     <>
+      <IntroAnimation />
       <ScrollReveal />
       <Nav />
       <main id="main-content">
